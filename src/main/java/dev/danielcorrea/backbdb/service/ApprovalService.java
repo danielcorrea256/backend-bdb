@@ -32,6 +32,7 @@ public class ApprovalService {
     private final UserRepository userRepository;
     private final RequestTypeRepository requestTypeRepository;
     private final RequestLogRepository requestLogRepository;
+    private final EmailNotificationService emailNotificationService;
 
     /**
      * Retrieves all requests CREATED BY the user (for "My Requests" tab).
@@ -131,6 +132,9 @@ public class ApprovalService {
 
         ApprovalRequest savedRequest = approvalRequestRepository.save(request);
 
+        // Send email notification to approver
+        emailNotificationService.sendRequestCreatedNotification(savedRequest, approver);
+
         // Return as DTO (from requester's perspective)
         return mapToDTOForCreated(savedRequest);
     }
@@ -177,6 +181,9 @@ public class ApprovalService {
 
         requestLogRepository.save(log);
 
+        // Send email notification to requester
+        emailNotificationService.sendRequestStatusUpdateNotification(updatedRequest, approver, comments);
+
         // Return as DTO (from requester's perspective)
         return mapToDTOForCreated(updatedRequest);
     }
@@ -222,6 +229,9 @@ public class ApprovalService {
             .build();
 
         requestLogRepository.save(log);
+
+        // Send email notification to requester
+        emailNotificationService.sendRequestStatusUpdateNotification(updatedRequest, approver, comments);
 
         // Return as DTO (from requester's perspective)
         return mapToDTOForCreated(updatedRequest);
