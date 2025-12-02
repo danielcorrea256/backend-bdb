@@ -26,7 +26,7 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         
         // Allow requests from the frontend domain
-        config.addAllowedOrigin(frontendUrl);
+        config.addAllowedOriginPattern(frontendUrl);
         
         // Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
         config.addAllowedMethod("*");
