@@ -131,6 +131,7 @@ public class ApprovalService {
             .build();
 
         ApprovalRequest savedRequest = approvalRequestRepository.save(request);
+        approvalRequestRepository.flush(); // Ensure timestamps are set by Hibernate
 
         // Send email notification to approver
         emailNotificationService.sendRequestCreatedNotification(savedRequest, approver);
